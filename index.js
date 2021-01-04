@@ -4,7 +4,7 @@ const pool = require('./pool');
 
 const app = express();
 
-app.get('/movies', (req, res) => {
+app.get('/api/movies', (req, res) => {
   pool.query(
     'SELECT * FROM movie',
     (err, movies) => {
@@ -14,6 +14,26 @@ app.get('/movies', (req, res) => {
         });
       } else {
         res.json(movies);
+      }
+    },
+  );
+});
+
+app.get('/api/movies/:movieId', (req, res) => {
+  pool.query(
+    'SELECT * FROM movie WHERE id = ?',
+    [req.params.movieId],
+    (err, movies) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message,
+        });
+      } else if (movies.length === 0) {
+        res.status(404).json({
+          error: 'Movie not found',
+        });
+      } else {
+        res.json(movies[0]);
       }
     },
   );
