@@ -2,7 +2,11 @@ const express = require('express');
 require('dotenv').config();
 const pool = require('./pool');
 
+// Initialiser l'appli Express
 const app = express();
+
+// Permettre d'analyser les donnees entrantes en JSON
+app.use(express.json());
 
 app.get('/api/movies', (req, res) => {
   pool.query(
@@ -34,6 +38,29 @@ app.get('/api/movies/:movieId', (req, res) => {
         });
       } else {
         res.json(movies[0]);
+      }
+    },
+  );
+});
+
+app.post('/api/movies', (req, res) => {
+  pool.query(
+    'INSERT INTO movie (title,picture) VALUES(?,?)',
+    [req.body.title, req.body.picture],
+    (err, status) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message,
+        });
+      } else {
+        // Creation d'un objet qu'on va renvoyer au client
+        // representant la nouvelle ressource
+        const insertedMovie = {
+          id: status.insertId,
+          title: req.body.title,
+          picture: req.body.picture,
+        };
+        res.status(201).json(insertedMovie);
       }
     },
   );
