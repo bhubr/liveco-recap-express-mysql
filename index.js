@@ -1,9 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const pool = require('./pool');
 
 // Initialiser l'appli Express
 const app = express();
+
+// Permet d'autoriser des requêtes Cross-Origin
+app.use(cors());
 
 // Permettre d'analyser les donnees entrantes en JSON
 app.use(express.json());
