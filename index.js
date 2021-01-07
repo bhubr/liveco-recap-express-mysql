@@ -110,7 +110,7 @@ app.get('/api/categories/:categoryId/movies', (req, res) => {
         });
       } else if (categories.length === 0) {
         res.status(404).json({
-          error: 'Category not found'
+          error: 'Category not found',
         });
       } else {
         pool.query(
@@ -128,6 +128,45 @@ app.get('/api/categories/:categoryId/movies', (req, res) => {
         );
       }
     }
+  );
+});
+
+app.post('/api/performers', (req, res) => {
+  pool.query(
+    'INSERT INTO performer (name) VALUES(?)',
+    [req.body.name],
+    (err, status) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message,
+        });
+      } else {
+        // Creation d'un objet qu'on va renvoyer au client
+        // representant la nouvelle ressource
+        const insertedPerformer = {
+          id: status.insertId,
+          name: req.body.name,
+        };
+        res.status(201).json(insertedPerformer);
+      }
+    },
+  );
+});
+
+app.put('/api/movies/:movieId/performers/:performerId', (req, res) => {
+  const { movieId, performerId } = req.params;
+  pool.query(
+    'INSERT INTO movie_performer (movie_id,performer_id) VALUES(?,?)',
+    [movieId, performerId],
+    (err, status) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message,
+        });
+      } else {
+        res.sendStatus(204);
+      }
+    },
   );
 });
 

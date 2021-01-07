@@ -11,10 +11,21 @@ POST http://localhost:4000/api/movies
 Content-Type: application/json
 
 {
-  "title": "Avatar",
-  "picture": "http://example.com/avatar.jpg",
-  "category_id": 3
+  "title": "Titanic",
+  "picture": "http://example.com/Titanic.jpg",
+  "category_id": 2
 }
 
 ### Get movies from a category
 GET http://localhost:4000/api/categories/3/movies
+
+### Create a new performer
+POST http://localhost:4000/api/performers
+Content-Type: application/json
+
+{
+  "name": "Kate Winslet"
+}
+
+### Associate a performer to a movie
+PUT http://localhost:4000/api/movies/1/performers/2
