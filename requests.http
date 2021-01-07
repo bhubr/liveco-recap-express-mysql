@@ -28,4 +28,7 @@ Content-Type: application/json
 }
 
 ### Associate a performer to a movie
-PUT http://localhost:4000/api/movies/1/performers/2
+PUT http://localhost:4000/api/movies/7/performers/2
+
+### Get all performers in a movie
+GET http://localhost:4000/api/movies/7/performers

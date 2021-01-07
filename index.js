@@ -170,6 +170,27 @@ app.put('/api/movies/:movieId/performers/:performerId', (req, res) => {
   );
 });
 
+app.get('/api/movies/:movieId/performers', (req, res) => {
+  // Je dois sélectionner les acteurs (performers) associés à movieId
+  pool.query(
+    `
+    SELECT * FROM performer
+    JOIN movie_performer ON performer.id = movie_performer.performer_id
+    WHERE movie_performer.movie_id = ?
+    `,
+    [req.params.movieId],
+    (err, performers) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message
+        })
+      } else {
+        res.json(performers);
+      }
+    }
+  )
+});
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, (err) => {
