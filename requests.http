@@ -5,3 +5,16 @@ Content-Type: application/json
 {
   "name": "Science-Fiction"
 }
+
+### Create a new movie
+POST http://localhost:4000/api/movies
+Content-Type: application/json
+
+{
+  "title": "Avatar",
+  "picture": "http://example.com/avatar.jpg",
+  "category_id": 3
+}
+
+### Get movies from a category
+GET http://localhost:4000/api/categories/3/movies

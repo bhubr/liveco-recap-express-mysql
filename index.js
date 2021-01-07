@@ -49,8 +49,8 @@ app.get('/api/movies/:movieId', (req, res) => {
 
 app.post('/api/movies', (req, res) => {
   pool.query(
-    'INSERT INTO movie (title,picture) VALUES(?,?)',
-    [req.body.title, req.body.picture],
+    'INSERT INTO movie (title,picture,category_id) VALUES(?,?,?)',
+    [req.body.title, req.body.picture, req.body.category_id],
     (err, status) => {
       if (err) {
         res.status(500).json({
@@ -63,6 +63,7 @@ app.post('/api/movies', (req, res) => {
           id: status.insertId,
           title: req.body.title,
           picture: req.body.picture,
+          category_id: req.body.category_id,
         };
         res.status(201).json(insertedMovie);
       }
@@ -89,6 +90,44 @@ app.post('/api/categories', (req, res) => {
         res.status(201).json(insertedCategory);
       }
     },
+  );
+});
+
+// http://localhost:5000/api/categories/3/movies
+// http://blog.com/users/12/comments
+app.get('/api/categories/:categoryId/movies', (req, res) => {
+  // En principe, si on veut faire les choses "proprement",
+  // on doit d'abord vérifier que la catégorie existe
+  const { categoryId } = req.params;
+
+  pool.query(
+    'SELECT * FROM category WHERE id = ?',
+    [categoryId],
+    (err, categories) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message,
+        });
+      } else if (categories.length === 0) {
+        res.status(404).json({
+          error: 'Category not found'
+        });
+      } else {
+        pool.query(
+          'SELECT * FROM movie WHERE category_id = ?',
+          [req.params.categoryId],
+          (err, movies) => {
+            if (err) {
+              res.status(500).json({
+                error: err.message,
+              });
+            } else {
+              res.json(movies);
+            }
+          },
+        );
+      }
+    }
   );
 });
 
