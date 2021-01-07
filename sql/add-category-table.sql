@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS category (
+  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100)
+);
+
+ALTER TABLE movie ADD COLUMN category_id INTEGER;
+ALTER TABLE movie
+ADD CONSTRAINT fk_movie_category_1
+FOREIGN KEY(category_id) REFERENCES category(id);

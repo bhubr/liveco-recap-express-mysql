@@ -70,6 +70,28 @@ app.post('/api/movies', (req, res) => {
   );
 });
 
+app.post('/api/categories', (req, res) => {
+  pool.query(
+    'INSERT INTO category (name) VALUES(?)',
+    [req.body.name],
+    (err, status) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message,
+        });
+      } else {
+        // Creation d'un objet qu'on va renvoyer au client
+        // representant la nouvelle ressource
+        const insertedCategory = {
+          id: status.insertId,
+          name: req.body.name,
+        };
+        res.status(201).json(insertedCategory);
+      }
+    },
+  );
+});
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, (err) => {
