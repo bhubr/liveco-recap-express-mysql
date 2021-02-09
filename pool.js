@@ -16,8 +16,6 @@ const mysqlSettings = process.env.CLEARDB_DATABASE_URL
     queueLimit: 0,
   };
 
-console.log(mysqlSettings);
-
 const pool = mysql.createPool(mysqlSettings);
 
 module.exports = pool;
